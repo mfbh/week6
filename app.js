@@ -71,23 +71,37 @@ app.get("/deletecompleted", function(req,res){
     res.redirect("/listtask.html")
 })
 
+app.get("/findtasks/:start/:end",function(req,res){
+    let fileName = viewsPath + "/listtask.html";
+    query = {task_id: 
+        {$gte:parseInt(req.params.start),  
+        $lte:parseInt(req.params.end)}}
+    col.find(query).toArray(function (err,data){
+        res.render(fileName,{
+            task: data
+        });
+    });
+});
+
 app.post("/addNewTask", function(req,res){
     console.log(req.body);
+    let taskDetails=req.body;
+    let newId= Math.round(Math.random() * 1000)
     // db.push(req.body);
-    col.insertOne(req.body);
+    col.insertOne({task_id: newId, task: taskDetails.taskName, user: taskDetails.assignUser, date: taskDetails.taskDue, status: taskDetails.status, description: taskDetails.description});
     res.redirect("/listtask.html");
 
 });
 
  app.post("/deleteOneTask",function(req,res){
     let selectId = req.body;
-    col.deleteOne({_id: mongodb.ObjectId(selectId._id)})
+    col.deleteOne({task_id: parseInt(selectId.task_id)})
     res.redirect("/listtask.html")
      });
 
 app.post("/updatetask", function(req,res){
     let selectId= req.body;
-    let filter = {_id: mongodb.ObjectId(selectId._id)};
+    let filter = {task_id: parseInt(selectId.task_id)};
     let theUpdate = { $set: { status: selectId.status } } ;
     col.updateOne(filter,theUpdate);
     res.redirect("/listtask.html")

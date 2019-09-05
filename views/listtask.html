@@ -24,17 +24,17 @@
                 <%for (let i = 0 ; i< task.length; i++){ %>
                     <tr>
                         <td>
-                            <%= task[i]._id%>
+                            <%= task[i].task_id%>
                         </td>
                         <td>
-                            <%= task[i].taskName%>
+                            <%= task[i].task%>
                         </td>
                         <td>
-                            <%= task[i].assignUser%>
+                            <%= task[i].user%>
                         </td>
                             
                         <td>
-                            <%= task[i].taskDue%>
+                            <%= task[i].date%>
                         </td>
                         <td>
                             <%= task[i].status%>
